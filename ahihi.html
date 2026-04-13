@@ -18,20 +18,33 @@ body {
     padding: 30px;
     border-radius: 15px;
     display: inline-block;
+    width: 300px;
+}
+
+h2 {
+    margin-bottom: 20px;
 }
 
 button {
-    padding: 15px 30px;
-    font-size: 18px;
-    background: #238636;
-    color: white;
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    font-size: 16px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
 }
 
+.ios {
+    background: #238636;
+}
+
+.android {
+    background: #1f6feb;
+}
+
 button:hover {
-    background: #2ea043;
+    opacity: 0.9;
 }
 </style>
 </head>
@@ -39,123 +52,26 @@ button:hover {
 <body>
 
 <div class="box">
-    <h2>📲 Tải ứng dụng</h2>
-    <p>Nhấn nút bên dưới để tải</p>
+    <h2>📲 ksign and esign</h2>
 
-    <button onclick="downloadApp()">Download</button>
+    <!-- iOS -->
+    <button class="ios" onclick="downloadIOS()">
+        🍎 esign
+    </button>
+
+    <!-- Android -->
+    <button class="android" onclick="downloadAPK()">
+        🤖 ksign
+    </button>
 </div>
 
 <script>
-function downloadApp() {
-    window.location.href = "<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Download App</title>
-
-<style>
-body {
-    background: #0d1117;
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    padding-top: 100px;
-}
-
-.box {
-    background: #161b22;
-    padding: 30px;
-    border-radius: 15px;
-    display: inline-block;
-}
-
-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    background: #238636;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #2ea043;
-}
-</style>
-</head>
-
-<body>
-
-<div class="box">
-    <h2>📲 Tải ứng dụng</h2>
-    <p>Nhấn nút bên dưới để tải</p>
-
-    <button onclick="downloadApp()">Download</button>
-</div>
-
-<script>
-function downloadApp() {
-    window.location.href = "itms-services://?action=download-manifest&url=<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Download App</title>
-
-<style>
-body {
-    background: #0d1117;
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    padding-top: 100px;
-}
-
-.box {
-    background: #161b22;
-    padding: 30px;
-    border-radius: 15px;
-    display: inline-block;
-}
-
-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    background: #238636;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #2ea043;
-}
-</style>
-</head>
-
-<body>
-
-<div class="box">
-    <h2>📲 Tải ứng dụng</h2>
-    <p>Nhấn nút bên dưới để tải</p>
-
-    <button onclick="downloadApp()">Download</button>
-</div>
-
-<script>
-function downloadApp() {
+function downloadIOS() {
     window.location.href = "itms-services://?action=download-manifest&url=https://gist.githubusercontent.com/bynguyencongthanhlonecuaskibiditoilet/caa641c94a838574c0b5d7397c05f736/raw/5100e81b756ce419bbcedbd94462a7efd206133b/NCT.plist";
 }
-</script>
 
-</body>
-</html>";
-}
-</script>
-
-</body>
-</html>";
+function downloadAPK() {
+    window.location.href = "itms-services://?action=download-manifest&url=https://gist.githubusercontent.com/bynguyencongthanhlonecuaskibiditoilet/3e6faf626eb745224e7bb1dfc7080139/raw/59ad9f9889c4459ce7edbb8e2d02b9d5729c337b/HTT.plist";
 }
 </script>
 
