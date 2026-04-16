@@ -1,79 +1,140 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Download App</title>
-
-<style>
-body {
-    background: #0d1117;
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    padding-top: 100px;
-}
-
-.box {
-    background: #161b22;
-    padding: 30px;
-    border-radius: 15px;
-    display: inline-block;
-    width: 300px;
-}
-
-h2 {
-    margin-bottom: 20px;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    margin-top: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.ios {
-    background: #238636;
-}
-
-.android {
-    background: #1f6feb;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Mini Gist RAW</title>
+  <style>
+    body { font-family: Arial; background:#0d1117; color:#c9d1d9; margin:0 }
+    header { background:#161b22; padding:10px 20px; display:flex; justify-content:space-between }
+    input, textarea { width:100%; padding:8px; margin-top:5px; background:#0d1117; color:white; border:1px solid #30363d }
+    button { padding:6px 10px; margin-top:5px; background:#238636; border:none; color:white; cursor:pointer }
+    .container { padding:20px; max-width:900px; margin:auto }
+    .gist { background:#161b22; padding:10px; margin-top:10px; border-radius:6px }
+    .hidden { display:none }
+    a { color:#58a6ff }
+  </style>
 </head>
-
 <body>
 
-<div class="box">
-    <h2>📲 ksign and esign</h2>
+<header>
+  <h3>Mini Gist RAW</h3>
+  <div id="userArea"></div>
+</header>
 
-    <!-- iOS -->
-    <button class="ios" onclick="downloadIOS()">
-        🍎 esign
-    </button>
+<div class="container">
 
-    <!-- Android -->
-    <button class="android" onclick="downloadAPK()">
-        🤖 ksign
-    </button>
+<!-- LOGIN -->
+<div id="auth">
+  <h3>Đăng nhập</h3>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Đăng nhập</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <h3>Tạo Gist</h3>
+  <input id="title" placeholder="Tên file (vd: congthanh.plist)">
+  <textarea id="code" rows="6" placeholder="Dán code..."></textarea>
+  <button onclick="createGist()">RAW</button>
+
+  <h3>Danh sách Gist</h3>
+  <div id="gists"></div>
+</div>
+
 </div>
 
 <script>
-function downloadIOS() {
-    window.location.href = "itms-services://?action=download-manifest&url=https://gist.githubusercontent.com/bynguyencongthanhlonecuaskibiditoilet/caa641c94a838574c0b5d7397c05f736/raw/5100e81b756ce419bbcedbd94462a7efd206133b/NCT.plist";
+// 🔐 TÀI KHOẢN
+const USER = "nguyencongthanh10062011";
+const PASS = "106211";
+
+// LOGIN
+function login(){
+  if(username.value === USER && password.value === PASS){
+    auth.classList.add("hidden");
+    app.classList.remove("hidden");
+    userArea.innerText = USER;
+    loadGists();
+  } else {
+    alert("Sai tài khoản hoặc mật khẩu");
+  }
 }
 
-function downloadAPK() {
-    window.location.href = "itms-services://?action=download-manifest&url=https://gist.githubusercontent.com/bynguyencongthanhlonecuaskibiditoilet/3e6faf626eb745224e7bb1dfc7080139/raw/59ad9f9889c4459ce7edbb8e2d02b9d5729c337b/HTT.plist";
+// TẠO GIST + MỞ RAW
+function createGist(){
+  let id = Date.now();
+
+  if(!title.value || !code.value){
+    alert("Nhập đầy đủ!");
+    return;
+  }
+
+  let gistsData = JSON.parse(localStorage.getItem("gists") || "[]");
+
+  gistsData.push({
+    id: id,
+    name: title.value,
+    code: code.value
+  });
+
+  localStorage.setItem("gists", JSON.stringify(gistsData));
+
+  // 👉 mở RAW + giữ tên file
+  location.href = `?raw=1&id=${id}&name=${encodeURIComponent(title.value)}`;
 }
+
+// LOAD DANH SÁCH
+function loadGists(){
+  let g = JSON.parse(localStorage.getItem("gists") || "[]");
+  gists.innerHTML = "";
+
+  g.reverse().forEach(x => {
+    let link = `?raw=1&id=${x.id}&name=${encodeURIComponent(x.name)}`;
+
+    gists.innerHTML += `
+      <div class="gist">
+        <b>${x.name}</b>
+        <pre>${x.code}</pre>
+        <a href="${link}" target="_blank">RAW</a>
+      </div>
+    `;
+  });
+}
+
+// 🔥 RAW MODE (GIỐNG GITHUB RAW)
+(function(){
+  let params = new URLSearchParams(location.search);
+
+  if(params.get("raw")){
+    let id = params.get("id");
+    let name = params.get("name") || "file";
+
+    let g = JSON.parse(localStorage.getItem("gists") || "[]");
+    let f = g.find(x => x.id == id);
+
+    if(f){
+      // xoá giao diện
+      document.head.innerHTML = "";
+
+      // 👉 giữ tên file
+      document.title = name;
+
+      document.body.style.background = "white";
+      document.body.style.color = "black";
+      document.body.style.margin = "0";
+      document.body.style.padding = "10px";
+
+      // 👉 hiển thị text thuần
+      document.body.innerText = f.code;
+    } else {
+      document.body.innerText = "Not found";
+    }
+  }
+})();
 </script>
 
 </body>
 </html>
+```
